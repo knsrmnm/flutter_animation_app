@@ -1,8 +1,5 @@
-import 'dart:math';
-
+import 'package:animate_icons/animate_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:progress_state_button/iconed_button.dart';
-import 'package:progress_state_button/progress_button.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,12 +9,22 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  ButtonState _buttonState = ButtonState.idle;
-  ButtonState _button2State = ButtonState.idle;
+  late AnimateIconController c1, c2, c3;
 
   @override
   void initState() {
+    c1 = AnimateIconController();
+    c2 = AnimateIconController();
+    c3 = AnimateIconController();
     super.initState();
+  }
+
+  bool onEndIconPress(BuildContext context) {
+    return true;
+  }
+
+  bool onStartIconPress(BuildContext context) {
+    return true;
   }
 
   @override
@@ -34,52 +41,33 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ProgressButton.icon(
-                  iconedButtons: {
-                    ButtonState.idle: const IconedButton(
-                        text: "Send",
-                        icon: Icon(Icons.send, color:Colors.white),
-                        color: Colors.black),
-                    ButtonState.loading: const IconedButton(
-                        text: "Loading", color: Colors.black),
-                    ButtonState.fail: IconedButton(
-                        text: "Failed",
-                        icon: const Icon(Icons.cancel, color: Colors.white),
-                        color: Colors.red.shade300),
-                    ButtonState.success: IconedButton(
-                        text: "Success",
-                        icon: const Icon(
-                          Icons.check_circle,
-                          color: Colors.white,
-                        ),
-                        color: Colors.green.shade400)
-                  },
-                  onPressed: onPressedButton,
-                  state: _buttonState,
-                ),
-                const SizedBox(height: 50.0),
-                ProgressButton.icon(
-                  iconedButtons: {
-                    ButtonState.idle: const IconedButton(
-                        text: "Send",
-                        icon: Icon(Icons.send, color:Colors.white),
-                        color: Colors.black),
-                    ButtonState.loading: const IconedButton(
-                        text: "Loading", color: Colors.black),
-                    ButtonState.fail: IconedButton(
-                        text: "Failed",
-                        icon: const Icon(Icons.cancel, color: Colors.white),
-                        color: Colors.red.shade300),
-                    ButtonState.success: IconedButton(
-                        text: "Success",
-                        icon: const Icon(
-                          Icons.check_circle,
-                          color: Colors.white,
-                        ),
-                        color: Colors.green.shade400)
-                  },
-                  onPressed: onPressedButton2,
-                  state: _button2State,
+                Wrap(
+                  children: [
+                    AnimateIcons(
+                      startIcon: Icons.add_circle,
+                      endIcon: Icons.cancel_outlined,
+                      controller: c1,
+                      size: 45.0,
+                      onEndIconPress: () => onEndIconPress(context),
+                      onStartIconPress: () => onStartIconPress(context),
+                    ),
+                    AnimateIcons(
+                      startIcon: Icons.star,
+                      endIcon: Icons.star_border,
+                      controller: c2,
+                      size: 45.0,
+                      onEndIconPress: () => onEndIconPress(context),
+                      onStartIconPress: () => onStartIconPress(context),
+                    ),
+                    AnimateIcons(
+                      startIcon: Icons.check_box,
+                      endIcon: Icons.check_box_outline_blank,
+                      controller: c3,
+                      size: 45.0,
+                      onEndIconPress: () => onEndIconPress(context),
+                      onStartIconPress: () => onStartIconPress(context),
+                    ),
+                  ],
                 ),
               ],
             )
@@ -87,54 +75,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
-
-  void onPressedButton() {
-    switch (_buttonState) {
-      case ButtonState.idle:
-        _buttonState = ButtonState.loading;
-        Future.delayed(Duration(seconds: 1), () {
-          setState(() {
-            // _buttonState =  Random.secure().nextBool() ? ButtonState.success : ButtonState.fail;
-            _buttonState = ButtonState.success;
-          });
-        });
-        break;
-      case ButtonState.loading:
-        break;
-      case ButtonState.success:
-        _buttonState = ButtonState.idle;
-        break;
-      case ButtonState.fail:
-        _buttonState = ButtonState.idle;
-        break;
-    }
-    setState(() {
-      _buttonState = _buttonState;
-    });
-  }
-
-  void onPressedButton2() {
-    switch (_button2State) {
-      case ButtonState.idle:
-        _button2State = ButtonState.loading;
-        Future.delayed(Duration(seconds: 1), () {
-          setState(() {
-            _button2State = ButtonState.fail;
-          });
-        });
-        break;
-      case ButtonState.loading:
-        break;
-      case ButtonState.success:
-        _button2State = ButtonState.idle;
-        break;
-      case ButtonState.fail:
-        _button2State = ButtonState.idle;
-        break;
-    }
-    setState(() {
-      _button2State = _button2State;
-    });
   }
 }
